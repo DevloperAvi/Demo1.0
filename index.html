@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>LT Grade Computer Teacher Exam Prep</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .correct-answer { background-color: #d1fae5 !important; border-color: #10b981 !important; }
+        .incorrect-answer { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
+        .explanation { transition: all 0.3s ease; }
+        .rotate-90 { transform: rotate(90deg); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-indigo-700 mb-2">LT Grade Computer Teacher Exam Prep</h1>
+            <p class="text-gray-600">Practice MCQ questions for your upcoming exam</p>
+        </header>
+
+        <!-- Syllabus Section Start -->
+        <div class="mb-8">
+            <button id="syllabusToggle" class="w-full flex items-center justify-between px-4 py-3 bg-blue-100 border border-blue-300 rounded-t-md font-semibold text-blue-900 focus:outline-none">
+                <span>📘 Computer Syllabus (Extracted)</span>
+                <i id="syllabusIcon" class="fas fa-chevron-down transition-transform"></i>
+            </button>
+            <div id="syllabusContent" class="bg-white border border-blue-300 border-t-0 rounded-b-md p-4 text-gray-800" style="display:none;">
+                <ol class="list-decimal pl-6 space-y-4">
+                    <li>
+                        <b>Digital Logic and Circuits & Discrete Mathematical Structures</b>
+                        <ul class="list-disc pl-5">
+                            <li>Number Systems</li>
+                            <li>Boolean Algebra and Logic Gates</li>
+                            <li>Simplification of Boolean Functions</li>
+                            <li>Combinational Circuits, Sequential Circuits, Memory Circuits</li>
+                            <li>Sets, Relations & Functions</li>
+                            <li>Mathematical Logic, Combinatorics & Recurrence Relations</li>
+                            <li>Graph Theory</li>
+                        </ul>
+                    </li>
+                    <li><b>Computer Organization and Architecture</b></li>
+                    <li><b>Data Structures and Algorithms</b></li>
+                    <li><b>Problem Solving through C Programming</b></li>
+                    <li><b>Object Oriented Techniques</b></li>
+                    <li><b>Operating System</b></li>
+                    <li><b>Database Management Systems (DBMS)</b></li>
+                    <li><b>Computer Networks</b></li>
+                    <li><b>Software Engineering</b></li>
+                    <li><b>Internet Technology & Web Technology</b></li>
+                    <li><b>System Analysis and Design</b></li>
+                    <li><b>Information Security & Cyber Laws</b></li>
+                    <li><b>Computer Graphics</b></li>
+                </ol>
+            </div>
+        </div>
+        <!-- Syllabus Section End -->
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-end gap-4 mb-6">
+                <div class="flex-1">
+                    <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Select Subject/Topic</label>
+                    <select id="subject" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">-- Select a topic --</option>
+                        <option value="unit1">Digital Logic and Circuits & Discrete Mathematical Structures</option>
+                        <option value="unit2">Computer Organization and Architecture</option>
+                        <option value="unit3">Data Structures and Algorithms</option>
+                        <option value="unit4">Problem Solving through C Programming</option>
+                        <option value="unit5">Object Oriented Techniques</option>
+                        <option value="unit6">Operating System</option>
+                        <option value="unit7">Database Management Systems (DBMS)</option>
+                        <option value="unit8">Computer Networks</option>
+                        <option value="unit9">Software Engineering</option>
+                        <option value="unit10">Internet Technology & Web Technology</option>
+                        <option value="unit11">System Analysis and Design</option>
+                        <option value="unit12">Information Security & Cyber Laws</option>
+                        <option value="unit13">Computer Graphics</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="questionCount" class="block text-sm font-medium text-gray-700 mb-1">Number of Questions</label>
+                    <select id="questionCount" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                    </select>
+                </div>
+                <button id="generateBtn" class="self-end mt-6 md:mt-0 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Generate Questions
+                </button>
+            </div>
+        </div>
+
+        <div id="quizContainer" class="hidden bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold text-gray-800" id="quizTopic"></h2>
+                <div class="flex items-center">
+                    <span class="text-sm font-medium text-gray-700 mr-2">Score:</span>
+                    <span class="text-lg font-bold text-indigo-600" id="scoreDisplay">0</span>
+                    <span class="text-lg font-bold text-gray-600">/</span>
+                    <span class="text-lg font-bold text-gray-600" id="totalQuestions">0</span>
+                </div>
+            </div>
+            <div id="questionsContainer"></div>
+            <div class="mt-6 flex justify-between">
+                <button id="resetBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    Reset Quiz
+                </button>
+                <button id="newQuizBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    New Quiz
+                </button>
+            </div>
+        </div>
+
+        <div id="instructions" class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-blue-800 mb-2">How to Use This Practice Tool:</h3>
+            <ul class="list-disc pl-5 text-blue-700 space-y-1">
+                <li>Select a subject/topic from the dropdown</li>
+                <li>Click <b>Generate Questions</b> to fetch MCQs</li>
+                <li>Select your answer for each question</li>
+                <li>Explanations show after you pick an option</li>
+                <li>Your score updates automatically</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Syllabus toggle logic
+        const syllabusToggle = document.getElementById('syllabusToggle');
+        const syllabusContent = document.getElementById('syllabusContent');
+        const syllabusIcon = document.getElementById('syllabusIcon');
+        syllabusToggle.addEventListener('click', () => {
+            if (syllabusContent.style.display === 'none') {
+                syllabusContent.style.display = 'block';
+                syllabusIcon.classList.add('rotate-90');
+            } else {
+                syllabusContent.style.display = 'none';
+                syllabusIcon.classList.remove('rotate-90');
+            }
+        });
+
+        // 100 MCQs for unit1 (Digital Logic and Circuits & Discrete Mathematical Structures)
+        const unit1Questions = [
+            {
+                question: "Which of the following is not a positional number system?",
+                options: ["Decimal", "Binary", "Hexadecimal", "Roman"],
+                correctAnswer: 3,
+                explanation: "Roman numerals are not a positional number system."
+            },
+            {
+                question: "The base of the binary number system is:",
+                options: ["2", "8", "10", "16"],
+                correctAnswer: 0,
+                explanation: "Binary system uses base 2."
+            },
+            {
+                question: "Which logic gate is called a universal gate?",
+                options: ["AND", "OR", "NOT", "NAND"],
+                correctAnswer: 3,
+                explanation: "NAND gate is called a universal gate."
+            },
+            {
+                question: "Which of the following is not a valid Boolean expression?",
+                options: ["A + A = A", "A . 0 = 0", "A + 1 = A", "A . 1 = A"],
+                correctAnswer: 2,
+                explanation: "A + 1 = 1 is the correct Boolean expression."
+            },
+            {
+                question: "The complement of A + B is:",
+                options: ["A . B", "Ā . B̄", "Ā + B̄", "A + B"],
+                correctAnswer: 1,
+                explanation: "By DeMorgan's law, complement of A + B is Ā . B̄."
+            },
+             {
+    question: "Which of the following is not a positional number system?",
+    options: ["Decimal", "Binary", "Hexadecimal", "Roman"],
+    correctAnswer: 3,
+    explanation: "Roman numerals do not use place value, so they are non-positional."
+  },
+  {
+    question: "The base of the binary number system is:",
+    options: ["2", "8", "10", "16"],
+    correctAnswer: 0,
+    explanation: "Binary uses base 2 with digits 0 and 1."
+  },
+  {
+    question: "What is the hexadecimal equivalent of the decimal number 255?",
+    options: ["A1", "F1", "FF", "FA"],
+    correctAnswer: 2,
+    explanation: "255 in base-10 equals FF in base-16."
+  },
+  {
+    question: "Which number system uses digits 0 through 7?",
+    options: ["Octal", "Hexadecimal", "Binary", "Decimal"],
+    correctAnswer: 0,
+    explanation: "Octal is base 8 and uses digits 0–7."
+  },
+  {
+    question: "The binary number 1110 equals which decimal value?",
+    options: ["12", "13", "14", "15"],
+    correctAnswer: 2,
+    explanation: "1×8 + 1×4 + 1×2 + 0×1 = 14."
+  },
+  {
+    question: "Which of the following is an invalid octal number?",
+    options: ["77", "70", "88", "12"],
+    correctAnswer: 2,
+    explanation: "Octal digits range from 0 to 7, so 8 is invalid."
+  },
+  {
+    question: "1's complement of binary 110010 is:",
+    options: ["101101", "001101", "0011010", "0011011"],
+    correctAnswer: 1,
+    explanation: "Invert all bits: 110010 → 001101."
+  },
+  {
+    question: "2's complement of binary 10101 is:",
+    options: ["01010", "01011", "10110", "11111"],
+    correctAnswer: 1,
+    explanation: "Two's complement = 1's complement (01010) + 1 = 01011."
+  },
+  {
+    question: "Binary addition of 1110 and 1101 yields:",
+    options: ["10111", "11011", "11001", "10011"],
+    correctAnswer: 1,
+    explanation: "14 (1110) + 13 (1101) = 27, which is 11011 in binary."
+  },
+  {
+    question: "Which base is used by the hexadecimal number system?",
+    options: ["8", "10", "12", "16"],
+    correctAnswer: 3,
+    explanation: "Hexadecimal is base 16."
+  },
+  {
+    question: "Which logic gates are universal gates?",
+    options: ["AND and OR", "XOR and XNOR", "NAND and NOR", "NOT and OR"],
+    correctAnswer: 2,
+    explanation: "NAND and NOR can implement any Boolean function."
+  },
+  {
+    question: "According to DeMorgan’s law, (A + B)’ equals:",
+    options: ["A’ + B’", "A’B’", "(AB)’", "AB"],
+    correctAnswer: 1,
+    explanation: "The complement of a sum equals the product of complements: (A+B)'=A'B'."
+  },
+  {
+    question: "Which gate outputs 1 only when all inputs are 1?",
+    options: ["OR", "AND", "NOR", "XOR"],
+    correctAnswer: 1,
+    explanation: "AND requires all inputs to be high for a high output."
+  },
+  {
+    question: "The output of an XOR gate is 1 when inputs are:",
+    options: ["Both 1", "Both 0", "Different", "Same"],
+    correctAnswer: 2,
+    explanation: "XOR is true when inputs differ."
+  },
+  {
+    question: "Boolean algebra was introduced by:",
+    options: ["George Boole", "Augustus DeMorgan", "Claude Shannon", "Leibniz"],
+    correctAnswer: 0,
+    explanation: "George Boole developed Boolean algebra."
+  },
+  {
+    question: "Which gate has only one input?",
+    options: ["NOT", "NAND", "NOR", "OR"],
+    correctAnswer: 0,
+    explanation: "The NOT gate inverts a single input."
+  },
+  {
+    question: "The dual of A + 0 = A is:",
+    options: ["A · 1 = A", "A + 1 = A", "A · 0 = 0", "A · 1 = 0"],
+    correctAnswer: 0,
+    explanation: "Duality swaps + with · and 0 with 1."
+  },
+  {
+    question: "(A + B)(A + B’) simplifies to:",
+    options: ["A", "B", "A + B", "AB"],
+    correctAnswer: 0,
+    explanation: "Using absorption: (A+B)(A+B') = A."
+  },
+  {
+    question: "The function F = A ⊕ B ⊕ C represents:",
+    options: ["Majority function", "Parity function", "Even function", "AND"],
+    correctAnswer: 1,
+    explanation: "Odd-parity equals XOR of all inputs."
+  },
+  {
+    question: "The complement of AB + C is:",
+    options: ["A’ + B’C’", "A’B’C’", "(A’ + B’)C’", "A’ + B’ + C’"],
+    correctAnswer: 2,
+    explanation: "By DeMorgan: (AB + C)' = (AB)' · C' = (A'+B')C'."
+  },
+  {
+    question: "The output of a NOR gate equals:",
+    options: ["(A + B)’", "(AB)’", "A’ + B’", "AB’"],
+    correctAnswer: 0,
+    explanation: "NOR is the complement of OR."
+  },
+  {
+    question: "A truth table with 4 variables has how many rows?",
+    options: ["8", "16", "32", "64"],
+    correctAnswer: 1,
+    explanation: "2⁴ = 16 input combinations."
+  },
+  {
+    question: "Expression A + AB simplifies to:",
+    options: ["A", "AB", "B", "A + B"],
+    correctAnswer: 0,
+    explanation: "Absorption law: A + AB = A."
+  },
+  {
+    question: "Which gate outputs 1 only if all inputs are 0?",
+    options: ["OR", "NAND", "NOR", "AND"],
+    correctAnswer: 2,
+    explanation: "NOR is the complement of OR."
+  },
+  {
+    question: "A 2-variable Karnaugh map has how many cells?",
+    options: ["2", "4", "6", "8"],
+    correctAnswer: 1,
+    explanation: "Cells equal 2^variables = 4."
+  },
+  {
+    question: "In a K-map, two adjacent 1s form a group of size:",
+    options: ["1", "2", "4", "8"],
+    correctAnswer: 1,
+    explanation: "Groups are powers of two; two adjacent 1s → group of 2."
+  },
+  {
+    question: "Don’t-care conditions in K-maps are used to:",
+    options: ["Increase terms", "Decrease terms", "Ignore variables entirely", "Find maxterms"],
+    correctAnswer: 1,
+    explanation: "Including X’s with 1-groups helps reduce terms."
+  },
+  {
+    question: "Expression (A + B)(A’ + C) simplifies to:",
+    options: ["AB + C", "AC + B", "BC + A", "A’B + C’"],
+    correctAnswer: 0,
+    explanation: "By algebra or K-map: (A+B)(A’+C) = AB + C."
+  },
+  {
+    question: "Consensus theorem states AB + A’C + BC equals:",
+    options: ["AB + A’C", "AB + BC", "A’C", "AB + AC"],
+    correctAnswer: 0,
+    explanation: "BC is redundant (consensus term)."
+  },
+  {
+    question: "Which is a canonical SOP form?",
+    options: ["AB + C", "A’B’C + ABC", "A + B + C", "AB + A’C"],
+    correctAnswer: 1,
+    explanation: "Canonical SOP sums minterms with all variables present."
+  },
+  {
+    question: "In Boolean algebra, AA equals:",
+    options: ["1", "0", "A", "A’"],
+    correctAnswer: 2,
+    explanation: "Idempotent law: A·A = A."
+  },
+  {
+    question: "Essential prime implicant in K-map is:",
+    options: ["Always redundant", "Necessary for cover", "Eliminated in SOP", "A don't-care"],
+    correctAnswer: 1,
+    explanation: "It covers at least one 1 that no other prime implicant covers."
+  },
+  {
+    question: "For F(A,B) = Σm(1,2), minimal form is:",
+    options: ["A + B", "A’ + B’", "AB", "A ⊕ B"],
+    correctAnswer: 3,
+    explanation: "On minterms 01 and 10, function is XOR."
+  },
+  {
+    question: "How many cells are there in a 4-variable K-map?",
+    options: ["8", "12", "16", "32"],
+    correctAnswer: 2,
+    explanation: "2⁴ = 16 cells."
+  },
+  {
+    question: "A full adder can be constructed from:",
+    options: ["Two half adders and an OR gate", "One half adder and two OR gates", "Two half adders only", "Three XOR gates"],
+    correctAnswer: 0,
+    explanation: "Sum via two half adders; OR combines carries."
+  },
+  {
+    question: "How many select lines are required for a 16-to-1 multiplexer?",
+    options: ["2", "3", "4", "5"],
+    correctAnswer: 2,
+    explanation: "2^s = 16 ⇒ s = 4."
+  },
+  {
+    question: "A multiplexer is also known as a:",
+    options: ["Data distributor", "Data selector", "Code converter", "Encoder"],
+    correctAnswer: 1,
+    explanation: "MUX selects one of many inputs to a single output."
+  },
+  {
+    question: "A priority encoder gives priority to:",
+    options: ["Lower-order inputs", "Higher-order inputs", "Random input", "None"],
+    correctAnswer: 1,
+    explanation: "When multiple inputs are active, the highest priority line is encoded."
+  },
+  {
+    question: "Which circuit converts binary to Gray code?",
+    options: ["Encoder", "Decoder", "XOR-based circuit", "Multiplexer"],
+    correctAnswer: 2,
+    explanation: "Gray = b3, b3⊕b2, b2⊕b1, b1⊕b0, realized with XORs."
+  },
+  {
+    question: "Outputs of a 4-bit magnitude comparator are:",
+    options: ["A+B, A–B", "A>B, A<B, A=B", "A OR B, A AND B", "None"],
+    correctAnswer: 1,
+    explanation: "Comparator indicates greater, less, or equal."
+  },
+  {
+    question: "A 7-segment display can show:",
+    options: ["Only decimal digits", "Digits and some letters", "Only letters", "Nothing without a driver"],
+    correctAnswer: 1,
+    explanation: "Segments can form 0–9 and certain letters (A,b,C,d,E,F)."
+  },
+  {
+    question: "A half-subtractor provides:",
+    options: ["Sum and Carry", "Difference and Borrow", "Quotient and Remainder", "Product and Remainder"],
+    correctAnswer: 1,
+    explanation: "Half-subtractor outputs Difference and Borrow bits."
+  },
+  {
+    question: "Which adder is faster?",
+    options: ["Ripple-carry adder", "Carry look-ahead adder", "Half adder", "Full subtractor"],
+    correctAnswer: 1,
+    explanation: "Carry look-ahead computes carries in parallel."
+  },
+  {
+    question: "The output of a 3-to-8 decoder is:",
+    options: ["Always active-high", "Always active-low", "Depends on design (active-high or active-low)", "Undefined"],
+    correctAnswer: 2,
+    explanation: "Decoders can be designed with active-high or active-low outputs."
+  },
+  {
+    question: "A flip-flop is a:",
+    options: ["Combinational circuit", "Sequential circuit", "Either combinational or sequential", "None"],
+    correctAnswer: 1,
+    explanation: "Flip-flops have memory; output depends on past inputs."
+  },
+  {
+    question: "The basic memory element is the:",
+    options: ["JK flip-flop", "D flip-flop", "SR flip-flop", "T flip-flop"],
+    correctAnswer: 2,
+    explanation: "An SR latch/flip-flop is the simplest storage element."
+  },
+  {
+  question: "Forbidden state in an SR latch (NOR implementation) occurs when:",
+  options: ["S=0, R=0", "S=1, R=0", "S=0, R=1", "S=1, R=1"],
+  correctAnswer: 3,
+  explanation: "S=R=1 drives both outputs low, violating complementarity."
+},
+{
+  question: "Which flip-flop is commonly used in shift registers?",
+  options: ["JK", "D", "T", "SR"],
+  correctAnswer: 1,
+  explanation: "D flip-flops are used to shift data reliably on the clock edge."
+},
+{
+  question: "A 4-bit ring counter has how many states?",
+  options: ["2", "4", "8", "16"],
+  correctAnswer: 1,
+  explanation: "Exactly one '1' circulates through 4 positions."
+},
+{
+  question: "A 4-flip-flop Johnson counter has how many states?",
+  options: ["4", "6", "8", "10"],
+  correctAnswer: 2,
+  explanation: "Johnson counter cycles through 2n states; for n=4, 8 states."
+},
+{
+  question: "Which is an edge-triggered device?",
+  options: ["SR latch", "Master-slave JK flip-flop", "NOR latch", "NAND latch"],
+  correctAnswer: 1,
+  explanation: "Master-slave JK responds on clock edges."
+},
+{
+  question: "A modulo-10 (decade) counter requires at least:",
+  options: ["2 flip-flops", "3 flip-flops", "4 flip-flops", "5 flip-flops"],
+  correctAnswer: 2,
+  explanation: "2^4=16 ≥ 10, so 4 flip-flops with appropriate reset logic."
+},
+{
+  question: "A register that shifts only right is called:",
+  options: ["Universal shift register", "Right-shift register", "Bidirectional shift register", "Left-shift register"],
+  correctAnswer: 1,
+  explanation: "It shifts in one fixed direction—right."
+},
+{
+  question: "Finite-state machines are classified as:",
+  options: ["Moore and Mealy", "D and T", "NAND and NOR", "Latch and Flip-flop"],
+  correctAnswer: 0,
+  explanation: "Moore depends on state; Mealy on state and input."
+},
+{
+  question: "A statement that is always true is called a:",
+  options: ["Contradiction", "Contingency", "Tautology", "Implication"],
+  correctAnswer: 2,
+  explanation: "Tautology evaluates to true for all valuations."
+},
+{
+  question: "The contrapositive of P → Q is:",
+  options: ["Q → P", "¬P → ¬Q", "¬Q → ¬P", "P ↔ Q"],
+  correctAnswer: 2,
+  explanation: "Contrapositive flips and negates: ¬Q → ¬P; it’s logically equivalent."
+},
+{
+  question: "Exclusive OR (P ⊕ Q) is true when:",
+  options: ["P and Q are both true", "P and Q are both false", "Exactly one of P or Q is true", "Always false"],
+  correctAnswer: 2,
+  explanation: "XOR is true for differing truth values."
+},
+{
+  question: "Logical equivalence P ↔ Q is false when:",
+  options: ["P and Q are both true", "P and Q are both false", "P≠Q", "Never"],
+  correctAnswer: 2,
+  explanation: "Biconditional is false when the operands differ."
+},
+{
+  question: "If P → Q is false, then:",
+  options: ["P is false", "Q is true", "P is true and Q is false", "P and Q are both true"],
+  correctAnswer: 2,
+  explanation: "An implication is false only when P is true and Q is false."
+},
+{
+  question: "Which is a valid inference rule?",
+  options: ["Affirming the consequent", "Denying the antecedent", "Modus ponens", "Post hoc"],
+  correctAnswer: 2,
+  explanation: "From P and P→Q, infer Q (modus ponens)."
+},
+{
+  question: "The negation of (P ∧ Q) is equivalent to:",
+  options: ["¬P ∧ ¬Q", "¬P ∨ ¬Q", "P ∨ Q", "¬P ↔ Q"],
+  correctAnswer: 1,
+  explanation: "DeMorgan’s law: ¬(P∧Q) ≡ ¬P ∨ ¬Q."
+},
+{
+  question: "A contingency is a formula that is:",
+  options: ["Always true", "Always false", "Sometimes true, sometimes false", "Unsatisfiable"],
+  correctAnswer: 2,
+  explanation: "Contingencies are true under some valuations and false under others."
+},
+{
+  question: "Which is a logical tautology?",
+  options: ["P ∨ ¬P", "P ∧ ¬P", "P → ¬P", "P ⊕ P"],
+  correctAnswer: 0,
+  explanation: "Law of excluded middle: P or not P is always true."
+},
+{
+  question: "The converse of P → Q is:",
+  options: ["Q → P", "¬Q → ¬P", "P ↔ Q", "¬P → ¬Q"],
+  correctAnswer: 0,
+  explanation: "Converse interchanges antecedent and consequent."
+},
+{
+  question: "The number of subsets of a set with n elements is:",
+  options: ["n", "n²", "2ⁿ", "n!"],
+  correctAnswer: 2,
+  explanation: "Each element may be included or not → 2 choices each."
+},
+{
+  question: "A relation R on set A is reflexive if:",
+  options: ["(a,a) ∈ R for all a ∈ A", "(a,b) ∈ R for a≠b", "(a,b) ∈ R for some a,b", "None of these"],
+  correctAnswer: 0,
+  explanation: "Reflexive requires every element relates to itself."
+},
+{
+  question: "A function that is one-to-one and onto is called:",
+  options: ["Injective", "Surjective", "Bijective", "Constant"],
+  correctAnswer: 2,
+  explanation: "Bijective means both injective and surjective."
+},
+{
+  question: "If A has m elements and B has n elements, the number of functions A→B is:",
+  options: ["mⁿ", "nᵐ", "m!n!", "m+n"],
+  correctAnswer: 1,
+  explanation: "Each of m elements of A chooses one of n images → n^m."
+},
+{
+  question: "An equivalence relation must be:",
+  options: ["Reflexive and symmetric only", "Reflexive, symmetric, and transitive", "Symmetric and transitive only", "Antisymmetric and transitive"],
+  correctAnswer: 1,
+  explanation: "All three properties define equivalence."
+},
+{
+  question: "The Cartesian product A×B is the set of:",
+  options: ["Unordered pairs from A and B", "Ordered pairs (a,b) with a∈A, b∈B", "All subsets of A and B", "Pairs with a=b"],
+  correctAnswer: 1,
+  explanation: "By definition, A×B contains ordered pairs."
+},
+{
+  question: "Power set P(A) of a set A is:",
+  options: ["Set of all elements of A", "Set of all subsets of A", "Set of proper subsets of A", "Set of supersets of A"],
+  correctAnswer: 1,
+  explanation: "Power set contains every subset, including ∅ and A."
+},
+{
+  question: "If |A|=3 and |B|=4, then |A×B| equals:",
+  options: ["7", "12", "24", "81"],
+  correctAnswer: 1,
+  explanation: "Size of Cartesian product is |A|·|B| = 12."
+},
+{
+  question: "A partial order is a relation that is:",
+  options: ["Reflexive, symmetric, transitive", "Irreflexive, symmetric, transitive", "Reflexive, antisymmetric, transitive", "Symmetric only"],
+  correctAnswer: 2,
+  explanation: "These properties define a poset."
+},
+{
+  question: "The inverse of a function f is denoted f⁻¹ and exists only if f is:",
+  options: ["Injective", "Surjective", "Bijective", "Constant"],
+  correctAnswer: 2,
+  explanation: "Inverse is a function only when f is bijective."
+},
+{
+    question: "The number of permutations of n objects taken r at a time is:",
+    options: ["C(n,r)", "P(n,r)=n!/(n−r)!", "n^r", "r!"],
+    correctAnswer: 1,
+    explanation: "Order matters in permutations."
+  },
+  {
+    question: "The number of ways to choose r objects from n distinct objects is:",
+    options: ["n!", "n^r", "C(n,r)=n!/(r!(n−r)!)", "P(n,r)"],
+    correctAnswer: 2,
+    explanation: "Combinations count selections without order."
+  },
+  {
+    question: "How many diagonals does an n-gon have?",
+    options: ["n(n−1)/2", "n(n−3)/2", "n−3", "2n−3"],
+    correctAnswer: 1,
+    explanation: "Subtract n sides from all pairs of vertices: C(n,2)−n = n(n−3)/2."
+  },
+  {
+    question: "The number of circular arrangements of n distinct objects is:",
+    options: ["n!", "(n−1)!", "n^n", "2n"],
+    correctAnswer: 1,
+    explanation: "Fix one position to remove rotational symmetry: (n−1)!."
+  },
+  {
+    question: "Solutions to x+y+z=10 with x,y,z≥0 count is:",
+    options: ["C(10,3)", "C(12,2)", "C(13,3)", "C(10,2)"],
+    correctAnswer: 1,
+    explanation: "Stars and bars: C(10+3−1,3−1)=C(12,2)."
+  },
+  {
+    question: "A recurrence for Tower of Hanoi moves with n disks is:",
+    options: ["T(n)=2T(n−1)+1", "T(n)=T(n−1)+T(n−2)", "T(n)=nT(n−1)", "T(n)=2n"],
+    correctAnswer: 0,
+    explanation: "Move n−1 to aux, move largest, then n−1 back."
+  },
+  {
+    question: "The Fibonacci sequence satisfies:",
+    options: ["F(n)=F(n−1)+F(n−2)", "F(n)=2F(n−1)", "F(n)=n+F(n−1)", "F(n)=nF(n−1)"],
+    correctAnswer: 0,
+    explanation: "By definition with F(0)=0, F(1)=1."
+  },
+  {
+    question: "Number of binary strings of length n without consecutive 1s follows:",
+    options: ["Arithmetic sequence", "Geometric sequence", "Fibonacci numbers", "Factorials"],
+    correctAnswer: 2,
+    explanation: "Recurrence S(n)=S(n−1)+S(n−2) mirrors Fibonacci."
+  },
+  {
+    question: "Derangements D(n) count permutations with no fixed points. D(4) equals:",
+    options: ["8", "9", "11", "13"],
+    correctAnswer: 1,
+    explanation: "D(4)=9 using formula D(n)=n![1−1/1!+1/2!−1/3!+1/4!]."
+  },
+  {
+    question: "Coefficient of x² in (1+x)⁵ equals:",
+    options: ["5", "10", "20", "15"],
+    correctAnswer: 1,
+    explanation: "Binomial coefficient C(5,2)=10."
+  },
+  {
+  question: "A simple graph with n vertices has at most how many edges?",
+  options: ["n²", "n(n−1)/2", "n(n+1)/2", "2n"],
+  correctAnswer: 1,
+  explanation: "At most one edge per unordered pair of distinct vertices."
+},
+{
+  question: "A tree with n vertices has how many edges?",
+  options: ["n−1", "n", "n+1", "2n−1"],
+  correctAnswer: 0,
+  explanation: "Fundamental property of trees: |E|=|V|−1."
+},
+{
+  question: "A graph without cycles is called a:",
+  options: ["Multigraph", "Tree", "Bipartite graph", "Complete graph"],
+  correctAnswer: 1,
+  explanation: "Trees are connected acyclic graphs."
+},
+{
+  question: "The degree of a vertex is:",
+  options: ["Number of edges in the graph", "Number of edges incident to the vertex", "Number of loops only", "Always even"],
+  correctAnswer: 1,
+  explanation: "Degree counts incident edges; a loop contributes 2."
+},
+{
+  question: "A complete graph Kₙ has chromatic number:",
+  options: ["n", "n−1", "2", "log₂ n"],
+  correctAnswer: 0,
+  explanation: "Each vertex must have a unique color in Kₙ."
+},
+{
+  question: "A graph is bipartite if and only if it has:",
+  options: ["No cycles", "No odd cycles", "No even cycles", "All degrees even"],
+  correctAnswer: 1,
+  explanation: "Bipartite ⇔ graph contains no odd cycle."
+},
+{
+  question: "Number of edges in K₅ is:",
+  options: ["5", "10", "15", "20"],
+  correctAnswer: 1,
+  explanation: "|E|=C(5,2)=10."
+},
+{
+  question: "A connected graph with exactly two vertices of odd degree has:",
+  options: ["An Euler circuit", "An Euler trail but not a circuit", "No Euler trail", "A Hamiltonian cycle"],
+  correctAnswer: 1,
+  explanation: "Euler trail exists with 0 or 2 odd vertices; circuit requires 0."
+},
+{
+  question: "A Hamiltonian path is a path that:",
+  options: ["Visits every edge exactly once", "Visits every vertex exactly once", "Is the shortest path", "Has no cycles"],
+  correctAnswer: 1,
+  explanation: "Hamiltonian paths include each vertex once."
+},
+{
+  question: "If a simple graph has all vertex degrees even, then it:",
+  options: ["Must be complete", "Has an Euler circuit", "Has a Hamiltonian cycle", "Is bipartite"],
+  correctAnswer: 1,
+  explanation: "Connected graphs with all even degrees have Euler circuits."
+},
+{
+  question: "In a simple graph, the sum of degrees of all vertices equals:",
+  options: ["|E|", "2|E|", "|V|", "|V|−1"],
+  correctAnswer: 1,
+  explanation: "Handshake lemma: Σ deg(v) = 2|E|."
+},
+{
+  question: "The adjacency matrix of a simple graph is:",
+  options: ["Symmetric", "Skew-symmetric", "Diagonal", "Upper triangular"],
+  correctAnswer: 0,
+  explanation: "For undirected graphs, A is symmetric with zeros on the diagonal."
+},
+{
+  question: "A connected acyclic undirected graph is a:",
+  options: ["Forest", "Tree", "DAG", "Cycle"],
+  correctAnswer: 1,
+  explanation: "A single connected component of a forest is a tree."
+},
+{
+  question: "The number of possible simple undirected graphs on n labeled vertices is:",
+  options: ["2^{n}", "2^{n−1}", "2^{C(n,2)}", "n!"],
+  correctAnswer: 2,
+  explanation: "Each of the C(n,2) possible edges may be present or absent."
+},
+{
+  question: "In a DAG (Directed Acyclic Graph), a topological ordering:",
+  options: ["Always exists", "Never exists", "Exists only if graph is complete", "Exists only if graph is bipartite"],
+  correctAnswer: 0,
+  explanation: "DAGs admit linear orders consistent with edge directions."
+},
+{
+    question: "Which of the following is not a positional number system?",
+    options: ["Decimal", "Binary", "Hexadecimal", "Roman"],
+    correctAnswer: 3,
+    explanation: "Roman numerals do not use place value, so they are non-positional."
+  },
+  {
+    question: "The base of the binary number system is:",
+    options: ["2", "8", "10", "16"],
+    correctAnswer: 0,
+    explanation: "Binary uses base 2 with digits 0 and 1."
+  },
+  {
+    question: "What is the hexadecimal equivalent of the decimal number 255?",
+    options: ["A1", "F1", "FF", "FA"],
+    correctAnswer: 2,
+    explanation: "255 in base-10 equals FF in base-16."
+  },
+  {
+    question: "Which number system uses digits 0 through 7?",
+    options: ["Octal", "Hexadecimal", "Binary", "Decimal"],
+    correctAnswer: 0,
+    explanation: "Octal is base 8 and uses digits 0–7."
+  },
+  {
+    question: "The binary number 1110 equals which decimal value?",
+    options: ["12", "13", "14", "15"],
+    correctAnswer: 2,
+    explanation: "1×8 + 1×4 + 1×2 + 0×1 = 14."
+  },
+  {
+    question: "Which of the following is an invalid octal number?",
+    options: ["77", "70", "88", "12"],
+    correctAnswer: 2,
+    explanation: "Octal digits range from 0 to 7, so 8 is invalid."
+  },
+  {
+    question: "1's complement of binary 110010 is:",
+    options: ["101101", "001101", "0011010", "0011011"],
+    correctAnswer: 1,
+    explanation: "Invert all bits: 110010 → 001101."
+  },
+  {
+    question: "2's complement of binary 10101 is:",
+    options: ["01010", "01011", "10110", "11111"],
+    correctAnswer: 1,
+    explanation: "Two's complement = 1's complement (01010) + 1 = 01011."
+  },
+  {
+    question: "Binary addition of 1110 and 1101 yields:",
+    options: ["10111", "11011", "11001", "10011"],
+    correctAnswer: 1,
+    explanation: "14 (1110) + 13 (1101) = 27, which is 11011 in binary."
+  },
+  {
+    question: "Which base is used by the hexadecimal number system?",
+    options: ["8", "10", "12", "16"],
+    correctAnswer: 3,
+    explanation: "Hexadecimal is base 16."
+  },
+  {
+    question: "Which logic gates are universal gates?",
+    options: ["AND and OR", "XOR and XNOR", "NAND and NOR", "NOT and OR"],
+    correctAnswer: 2,
+    explanation: "NAND and NOR can implement any Boolean function."
+  },
+  {
+    question: "According to DeMorgan’s law, (A + B)’ equals:",
+    options: ["A’ + B’", "A’B’", "(AB)’", "AB"],
+    correctAnswer: 1,
+    explanation: "The complement of a sum equals the product of complements: (A+B)'=A'B'."
+  },
+  {
+    question: "Which gate outputs 1 only when all inputs are 1?",
+    options: ["OR", "AND", "NOR", "XOR"],
+    correctAnswer: 1,
+    explanation: "AND requires all inputs to be high for a high output."
+  },
+  {
+    question: "The output of an XOR gate is 1 when inputs are:",
+    options: ["Both 1", "Both 0", "Different", "Same"],
+    correctAnswer: 2,
+    explanation: "XOR is true when inputs differ."
+  },
+  {
+    question: "Boolean algebra was introduced by:",
+    options: ["George Boole", "Augustus DeMorgan", "Claude Shannon", "Leibniz"],
+    correctAnswer: 0,
+    explanation: "George Boole developed Boolean algebra."
+  },
+  {
+    question: "Which gate has only one input?",
+    options: ["NOT", "NAND", "NOR", "OR"],
+    correctAnswer: 0,
+    explanation: "The NOT gate inverts a single input."
+  },
+  {
+    question: "The dual of A + 0 = A is:",
+    options: ["A · 1 = A", "A + 1 = A", "A · 0 = 0", "A · 1 = 0"],
+    correctAnswer: 0,
+    explanation: "Duality swaps + with · and 0 with 1."
+  },
+  {
+    question: "(A + B)(A + B’) simplifies to:",
+    options: ["A", "B", "A + B", "AB"],
+    correctAnswer: 0,
+    explanation: "Using absorption: (A+B)(A+B') = A."
+  },
+  {
+    question: "The function F = A ⊕ B ⊕ C represents:",
+    options: ["Majority function", "Parity function", "Even function", "AND"],
+    correctAnswer: 1,
+    explanation: "Odd-parity equals XOR of all inputs."
+  },
+  {
+    question: "The complement of AB + C is:",
+    options: ["A’ + B’C’", "A’B’C’", "(A’ + B’)C’", "A’ + B’ + C’"],
+    correctAnswer: 2,
+    explanation: "By DeMorgan: (AB + C)' = (AB)' · C' = (A'+B')C'."
+  },
+  {
+    question: "The output of a NOR gate equals:",
+    options: ["(A + B)’", "(AB)’", "A’ + B’", "AB’"],
+    correctAnswer: 0,
+    explanation: "NOR is the complement of OR."
+  },
+  {
+    question: "A truth table with 4 variables has how many rows?",
+    options: ["8", "16", "32", "64"],
+    correctAnswer: 1,
+    explanation: "2⁴ = 16 input combinations."
+  },
+  {
+    question: "Expression A + AB simplifies to:",
+    options: ["A", "AB", "B", "A + B"],
+    correctAnswer: 0,
+    explanation: "Absorption law: A + AB = A."
+  },
+  {
+    question: "Which gate outputs 1 only if all inputs are 0?",
+    options: ["OR", "NAND", "NOR", "AND"],
+    correctAnswer: 2,
+    explanation: "NOR is the complement of OR."
+  },
+  {
+    question: "A 2-variable Karnaugh map has how many cells?",
+    options: ["2", "4", "6", "8"],
+    correctAnswer: 1,
+    explanation: "Cells equal 2^variables = 4."
+  },
+  {
+    question: "In a K-map, two adjacent 1s form a group of size:",
+    options: ["1", "2", "4", "8"],
+    correctAnswer: 1,
+    explanation: "Groups are powers of two; two adjacent 1s → group of 2."
+  },
+  {
+    question: "Don’t-care conditions in K-maps are used to:",
+    options: ["Increase terms", "Decrease terms", "Ignore variables entirely", "Find maxterms"],
+    correctAnswer: 1,
+    explanation: "Including X’s with 1-groups helps reduce terms."
+  },
+  {
+    question: "Expression (A + B)(A’ + C) simplifies to:",
+    options: ["AB + C", "AC + B", "BC + A", "A’B + C’"],
+    correctAnswer: 0,
+    explanation: "By algebra or K-map: (A+B)(A’+C) = AB + C."
+  },
+  {
+    question: "Consensus theorem states AB + A’C + BC equals:",
+    options: ["AB + A’C", "AB + BC", "A’C", "AB + AC"],
+    correctAnswer: 0,
+    explanation: "BC is redundant (consensus term)."
+  },
+  {
+    question: "Which is a canonical SOP form?",
+    options: ["AB + C", "A’B’C + ABC", "A + B + C", "AB + A’C"],
+    correctAnswer: 1,
+    explanation: "Canonical SOP sums minterms with all variables present."
+  },
+  {
+    question: "In Boolean algebra, AA equals:",
+    options: ["1", "0", "A", "A’"],
+    correctAnswer: 2,
+    explanation: "Idempotent law: A·A = A."
+  },
+  {
+    question: "Essential prime implicant in K-map is:",
+    options: ["Always redundant", "Necessary for cover", "Eliminated in SOP", "A don't-care"],
+    correctAnswer: 1,
+    explanation: "It covers at least one 1 that no other prime implicant covers."
+  },
+  {
+    question: "For F(A,B) = Σm(1,2), minimal form is:",
+    options: ["A + B", "A’ + B’", "AB", "A ⊕ B"],
+    correctAnswer: 3,
+    explanation: "On minterms 01 and 10, function is XOR."
+  },
+  {
+    question: "How many cells are there in a 4-variable K-map?",
+    options: ["8", "12", "16", "32"],
+    correctAnswer: 2,
+    explanation: "2⁴ = 16 cells."
+  },
+  {
+    question: "A full adder can be constructed from:",
+    options: ["Two half adders and an OR gate", "One half adder and two OR gates", "Two half adders only", "Three XOR gates"],
+    correctAnswer: 0,
+    explanation: "Sum via two half adders; OR combines carries."
+  },
+  {
+    question: "How many select lines are required for a 16-to-1 multiplexer?",
+    options: ["2", "3", "4", "5"],
+    correctAnswer: 2,
+    explanation: "2^s = 16 ⇒ s = 4."
+  },
+  {
+    question: "A multiplexer is also known as a:",
+    options: ["Data distributor", "Data selector", "Code converter", "Encoder"],
+    correctAnswer: 1,
+    explanation: "MUX selects one of many inputs to a single output."
+  },
+  {
+    question: "A priority encoder gives priority to:",
+    options: ["Lower-order inputs", "Higher-order inputs", "Random input", "None"],
+    correctAnswer: 1,
+    explanation: "When multiple inputs are active, the highest priority line is encoded."
+  },
+  {
+    question: "Which circuit converts binary to Gray code?",
+    options: ["Encoder", "Decoder", "XOR-based circuit", "Multiplexer"],
+    correctAnswer: 2,
+    explanation: "Gray = b3, b3⊕b2, b2⊕b1, b1⊕b0, realized with XORs."
+  },
+  {
+    question: "Outputs of a 4-bit magnitude comparator are:",
+    options: ["A+B, A–B", "A>B, A<B, A=B", "A OR B, A AND B", "None"],
+    correctAnswer: 1,
+    explanation: "Comparator indicates greater, less, or equal."
+  },
+  {
+    question: "A 7-segment display can show:",
+    options: ["Only decimal digits", "Digits and some letters", "Only letters", "Nothing without a driver"],
+    correctAnswer: 1,
+    explanation: "Segments can form 0–9 and certain letters (A,b,C,d,E,F)."
+  },
+  {
+    question: "A half-subtractor provides:",
+    options: ["Sum and Carry", "Difference and Borrow", "Quotient and Remainder", "Product and Remainder"],
+    correctAnswer: 1,
+    explanation: "Half-subtractor outputs Difference and Borrow bits."
+  },
+  {
+    question: "Which adder is faster?",
+    options: ["Ripple-carry adder", "Carry look-ahead adder", "Half adder", "Full subtractor"],
+    correctAnswer: 1,
+    explanation: "Carry look-ahead computes carries in parallel."
+  },
+  {
+    question: "The output of a 3-to-8 decoder is:",
+    options: ["Always active-high", "Always active-low", "Depends on design (active-high or active-low)", "Undefined"],
+    correctAnswer: 2,
+    explanation: "Decoders can be designed with active-high or active-low outputs."
+  },
+  {
+    question: "A flip-flop is a:",
+    options: ["Combinational circuit", "Sequential circuit", "Either combinational or sequential", "None"],
+    correctAnswer: 1,
+    explanation: "Flip-flops have memory; output depends on past inputs."
+  },
+  {
+    question: "The basic memory element is the:",
+    options: ["JK flip-flop", "D flip-flop", "SR flip-flop", "T flip-flop"],
+    correctAnswer: 2,
+    explanation: "An SR latch/flip-flop is the simplest storage element."
+  },
+  {
+    question: "Forbidden state in an SR latch (NOR implementation) occurs when:",
+    options: ["S=0, R=0", "S=1, R=0", "S=0, R=1", "S=1, R=1"],
+    correctAnswer: 3,
+    explanation: "S=R=1 drives both outputs low, violating complementarity."
+  },
+  {
+    question: "Which flip-flop is commonly used in shift registers?",
+    options: ["JK", "D", "T", "SR"],
+    correctAnswer: 1,
+    explanation: "D flip-flops are used to shift data reliably on the clock edge."
+  },
+  {
+    question: "A 4-bit ring counter has how many states?",
+    options: ["2", "4", "8", "16"],
+    correctAnswer: 1,
+    explanation: "Exactly one '1' circulates through 4 positions."
+  },
+  {
+    question: "A 4-flip-flop Johnson counter has how many states?",
+    options: ["4", "6", "8", "10"],
+    correctAnswer: 2,
+    explanation: "Johnson counter cycles through 2n states; for n=4, 8 states."
+  },
+  {
+    question: "Which is an edge-triggered device?",
+    options: ["SR latch", "Master-slave JK flip-flop", "NOR latch", "NAND latch"],
+    correctAnswer: 1,
+    explanation: "Master-slave JK responds on clock edges."
+  },
+  {
+    question: "A modulo-10 (decade) counter requires at least:",
+    options: ["2 flip-flops", "3 flip-flops", "4 flip-flops", "5 flip-flops"],
+    correctAnswer: 2,
+    explanation: "2^4=16 ≥ 10, so 4 flip-flops with appropriate reset logic."
+  },
+  {
+    question: "A register that shifts only right is called:",
+    options: ["Universal shift register", "Right-shift register", "Bidirectional shift register", "Left-shift register"],
+    correctAnswer: 1,
+    explanation: "It shifts in one fixed direction—right."
+  },
+  {
+    question: "Finite-state machines are classified as:",
+    options: ["Moore and Mealy", "D and T", "NAND and NOR", "Latch and Flip-flop"],
+    correctAnswer: 0,
+    explanation: "Moore depends on state; Mealy on state and input."
+  },
+  {
+    question: "A statement that is always true is called a:",
+    options: ["Contradiction", "Contingency", "Tautology", "Implication"],
+    correctAnswer: 2,
+    explanation: "Tautology evaluates to true for all valuations."
+  },
+  {
+    question: "The contrapositive of P → Q is:",
+    options: ["Q → P", "¬P → ¬Q", "¬Q → ¬P", "P ↔ Q"],
+    correctAnswer: 2,
+    explanation: "Contrapositive flips and negates: ¬Q → ¬P; it’s logically equivalent."
+  },
+  {
+    question: "Exclusive OR (P ⊕ Q) is true when:",
+    options: ["P and Q are both true", "P and Q are both false", "Exactly one of P or Q is true", "Always false"],
+    correctAnswer: 2,
+    explanation: "XOR is true for differing truth values."
+  },
+  {
+    question: "Logical equivalence P ↔ Q is false when:",
+    options: ["P and Q are both true", "P and Q are both false", "P≠Q", "Never"],
+    correctAnswer: 2,
+    explanation: "Biconditional is false when the operands differ."
+  },
+  {
+    question: "If P → Q is false, then:",
+    options: ["P is false", "Q is true", "P is true and Q is false", "P and Q are both true"],
+    correctAnswer: 2,
+    explanation: "An implication is false only when P is true and Q is false."
+  },
+  {
+    question: "Which is a valid inference rule?",
+    options: ["Affirming the consequent", "Denying the antecedent", "Modus ponens", "Post hoc"],
+    correctAnswer: 2,
+    explanation: "From P and P→Q, infer Q (modus ponens)."
+  },
+  {
+    question: "The negation of (P ∧ Q) is equivalent to:",
+    options: ["¬P ∧ ¬Q", "¬P ∨ ¬Q", "P ∨ Q", "¬P ↔ Q"],
+    correctAnswer: 1,
+    explanation: "DeMorgan’s law: ¬(P∧Q) ≡ ¬P ∨ ¬Q."
+  },
+  {
+    question: "A contingency is a formula that is:",
+    options: ["Always true", "Always false", "Sometimes true, sometimes false", "Unsatisfiable"],
+    correctAnswer: 2,
+    explanation: "Contingencies are true under some valuations and false under others."
+  },
+  {
+    question: "Which is a logical tautology?",
+    options: ["P ∨ ¬P", "P ∧ ¬P", "P → ¬P", "P ⊕ P"],
+    correctAnswer: 0,
+    explanation: "Law of excluded middle: P or not P is always true."
+  },
+  {
+    question: "The converse of P → Q is:",
+    options: ["Q → P", "¬Q → ¬P", "P ↔ Q", "¬P → ¬Q"],
+    correctAnswer: 0,
+    explanation: "Converse interchanges antecedent and consequent."
+  },
+  {
+    question: "The number of subsets of a set with n elements is:",
+    options: ["n", "n²", "2ⁿ", "n!"],
+    correctAnswer: 2,
+    explanation: "Each element may be included or not → 2 choices each."
+  },
+  {
+    question: "A relation R on set A is reflexive if:",
+    options: ["(a,a) ∈ R for all a ∈ A", "(a,b) ∈ R for a≠b", "(a,b) ∈ R for some a,b", "None of these"],
+    correctAnswer: 0,
+    explanation: "Reflexive requires every element relates to itself."
+  },
+  {
+    question: "A function that is one-to-one and onto is called:",
+    options: ["Injective", "Surjective", "Bijective", "Constant"],
+    correctAnswer: 2,
+    explanation: "Bijective means both injective and surjective."
+  },
+  {
+    question: "If A has m elements and B has n elements, the number of functions A→B is:",
+    options: ["mⁿ", "nᵐ", "m!n!", "m+n"],
+    correctAnswer: 1,
+    explanation: "Each of m elements of A chooses one of n images → n^m."
+  },
+  {
+    question: "An equivalence relation must be:",
+    options: ["Reflexive and symmetric only", "Reflexive, symmetric, and transitive", "Symmetric and transitive only", "Antisymmetric and transitive"],
+    correctAnswer: 1,
+    explanation: "All three properties define equivalence."
+  },
+  {
+    question: "The Cartesian product A×B is the set of:",
+    options: ["Unordered pairs from A and B", "Ordered pairs (a,b) with a∈A, b∈B", "All subsets of A and B", "Pairs with a=b"],
+    correctAnswer: 1,
+    explanation: "By definition, A×B contains ordered pairs."
+  },
+  {
+    question: "Power set P(A) of a set A is:",
+    options: ["Set of all elements of A", "Set of all subsets of A", "Set of proper subsets of A", "Set of supersets of A"],
+    correctAnswer: 1,
+    explanation: "Power set contains every subset, including ∅ and A."
+  },
+  {
+    question: "If |A|=3 and |B|=4, then |A×B| equals:",
+    options: ["7", "12", "24", "81"],
+    correctAnswer: 1,
+    explanation: "Size of Cartesian product is |A|·|B| = 12."
+  },
+  {
+    question: "A partial order is a relation that is:",
+    options: ["Reflexive, symmetric, transitive", "Irreflexive, symmetric, transitive", "Reflexive, antisymmetric, transitive", "Symmetric only"],
+    correctAnswer: 2,
+    explanation: "These properties define a poset."
+  },
+  {
+    question: "The inverse of a function f is denoted f⁻¹ and exists only if f is:",
+    options: ["Injective", "Surjective", "Bijective", "Constant"],
+    correctAnswer: 2,
+    explanation: "Inverse is a function only when f is bijective."
+  },
+  {
+    question: "The number of permutations of n objects taken r at a time is:",
+    options: ["C(n,r)", "P(n,r)=n!/(n−r)!", "n^r", "r!"],
+    correctAnswer: 1,
+    explanation: "Order matters in permutations."
+  },
+  {
+    question: "The number of ways to choose r objects from n distinct objects is:",
+    options: ["n!", "n^r", "C(n,r)=n!/(r!(n−r)!)", "P(n,r)"],
+    correctAnswer: 2,
+    explanation: "Combinations count selections without order."
+  },
+  {
+    question: "How many diagonals does an n-gon have?",
+    options: ["n(n−1)/2", "n(n−3)/2", "n−3", "2n−3"],
+    correctAnswer: 1,
+    explanation: "Subtract n sides from all pairs of vertices: C(n,2)−n = n(n−3)/2."
+  },
+  {
+    question: "The number of circular arrangements of n distinct objects is:",
+    options: ["n!", "(n−1)!", "n^n", "2n"],
+    correctAnswer: 1,
+    explanation: "Fix one position to remove rotational symmetry: (n−1)!."
+  },
+  {
+    question: "Solutions to x+y+z=10 with x,y,z≥0 count is:",
+    options: ["C(10,3)", "C(12,2)", "C(13,3)", "C(10,2)"],
+    correctAnswer: 1,
+    explanation: "Stars and bars: C(10+3−1,3−1)=C(12,2)."
+  },
+  {
+    question: "A recurrence for Tower of Hanoi moves with n disks is:",
+    options: ["T(n)=2T(n−1)+1", "T(n)=T(n−1)+T(n−2)", "T(n)=nT(n−1)", "T(n)=2n"],
+    correctAnswer: 0,
+    explanation: "Move n−1 to aux, move largest, then n−1 back."
+  },
+  {
+    question: "The Fibonacci sequence satisfies:",
+    options: ["F(n)=F(n−1)+F(n−2)", "F(n)=2F(n−1)", "F(n)=n+F(n−1)", "F(n)=nF(n−1)"],
+    correctAnswer: 0,
+    explanation: "By definition with F(0)=0, F(1)=1."
+  },
+  {
+    question: "Number of binary strings of length n without consecutive 1s follows:",
+    options: ["Arithmetic sequence", "Geometric sequence", "Fibonacci numbers", "Factorials"],
+    correctAnswer: 2,
+    explanation: "Recurrence S(n)=S(n−1)+S(n−2) mirrors Fibonacci."
+  },
+  {
+    question: "Derangements D(n) count permutations with no fixed points. D(4) equals:",
+    options: ["8", "9", "11", "13"],
+    correctAnswer: 1,
+    explanation: "D(4)=9 using formula D(n)=n![1−1/1!+1/2!−1/3!+1/4!]."
+  },
+  {
+    question: "Coefficient of x² in (1+x)⁵ equals:",
+    options: ["5", "10", "20", "15"],
+    correctAnswer: 1,
+    explanation: "Binomial coefficient C(5,2)=10."
+  },
+  {
+    question: "A simple graph with n vertices has at most how many edges?",
+    options: ["n²", "n(n−1)/2", "n(n+1)/2", "2n"],
+    correctAnswer: 1,
+    explanation: "At most one edge per unordered pair of distinct vertices."
+  },
+  {
+    question: "A tree with n vertices has how many edges?",
+    options: ["n−1", "n", "n+1", "2n−1"],
+    correctAnswer: 0,
+    explanation: "Fundamental property of trees: |E|=|V|−1."
+  },
+  {
+    question: "A graph without cycles is called a:",
+    options: ["Multigraph", "Tree", "Bipartite graph", "Complete graph"],
+    correctAnswer: 1,
+    explanation: "Trees are connected acyclic graphs."
+  },
+  {
+    question: "The degree of a vertex is:",
+    options: ["Number of edges in the graph", "Number of edges incident to the vertex", "Number of loops only", "Always even"],
+    correctAnswer: 1,
+    explanation: "Degree counts incident edges; a loop contributes 2."
+  },
+  {
+    question: "A complete graph Kₙ has chromatic number:",
+    options: ["n", "n−1", "2", "log₂ n"],
+    correctAnswer: 0,
+    explanation: "Each vertex must have a unique color in Kₙ."
+  },
+  {
+    question: "A graph is bipartite if and only if it has:",
+    options: ["No cycles", "No odd cycles", "No even cycles", "All degrees even"],
+    correctAnswer: 1,
+    explanation: "Bipartite ⇔ graph contains no odd cycle."
+  },
+  {
+    question: "Number of edges in K₅ is:",
+    options: ["5", "10", "15", "20"],
+    correctAnswer: 1,
+    explanation: "|E|=C(5,2)=10."
+  },
+  {
+    question: "A connected graph with exactly two vertices of odd degree has:",
+    options: ["An Euler circuit", "An Euler trail but not a circuit", "No Euler trail", "A Hamiltonian cycle"],
+    correctAnswer: 1,
+    explanation: "Euler trail exists with 0 or 2 odd vertices; circuit requires 0."
+  },
+  {
+    question: "A Hamiltonian path is a path that:",
+    options: ["Visits every edge exactly once", "Visits every vertex exactly once", "Is the shortest path", "Has no cycles"],
+    correctAnswer: 1,
+    explanation: "Hamiltonian paths include each vertex once."
+  },
+  {
+    question: "If a simple graph has all vertex degrees even, then it:",
+    options: ["Must be complete", "Has an Euler circuit", "Has a Hamiltonian cycle", "Is bipartite"],
+    correctAnswer: 1,
+    explanation: "Connected graphs with all even degrees have Euler circuits."
+  },
+  {
+    question: "In a simple graph, the sum of degrees of all vertices equals:",
+    options: ["|E|", "2|E|", "|V|", "|V|−1"],
+    correctAnswer: 1,
+    explanation: "Handshake lemma: Σ deg(v) = 2|E|."
+  },
+  {
+    question: "The adjacency matrix of a simple graph is:",
+    options: ["Symmetric", "Skew-symmetric", "Diagonal", "Upper triangular"],
+    correctAnswer: 0,
+    explanation: "For undirected graphs, A is symmetric with zeros on the diagonal."
+  },
+  {
+    question: "A connected acyclic undirected graph is a:",
+    options: ["Forest", "Tree", "DAG", "Cycle"],
+    correctAnswer: 1,
+    explanation: "A single connected component of a forest is a tree."
+  },
+  {
+    question: "The number of possible simple undirected graphs on n labeled vertices is:",
+    options: ["2^{n}", "2^{n−1}", "2^{C(n,2)}", "n!"],
+    correctAnswer: 2,
+    explanation: "Each of the C(n,2) possible edges may be present or absent."
+  },
+  {
+    question: "In a DAG (Directed Acyclic Graph), a topological ordering:",
+    options: ["Always exists", "Never exists", "Exists only if graph is complete", "Exists only if graph is bipartite"],
+    correctAnswer: 0,
+    explanation: "DAGs admit linear orders consistent with edge directions."
+  }
+
+
+            // ... Add the rest of your 100 questions here in the same format ...
+        ];
+
+        // You can add more units here as needed
+        const fallbackBank = {
+            unit1: unit1Questions,
+            unit2: [],
+            unit3: [],
+            unit4: [],
+            unit5: [],
+            unit6: [],
+            unit7: [],
+            unit8: [],
+            unit9: [],
+            unit10: [],
+            unit11: [],
+            unit12: [],
+            unit13: []
+        };
+
+        // DOM refs
+        const subjectSelect = document.getElementById('subject');
+        const questionCountSelect = document.getElementById('questionCount');
+        const generateBtn = document.getElementById('generateBtn');
+        const quizContainer = document.getElementById('quizContainer');
+        const questionsContainer = document.getElementById('questionsContainer');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const totalQuestions = document.getElementById('totalQuestions');
+        const quizTopic = document.getElementById('quizTopic');
+        const resetBtn = document.getElementById('resetBtn');
+        const newQuizBtn = document.getElementById('newQuizBtn');
+
+        // State
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let userAnswers = [];
+        let score = 0;
+
+        generateBtn.addEventListener('click', generateQuestions);
+        resetBtn.addEventListener('click', resetQuiz);
+        newQuizBtn.addEventListener('click', () => quizContainer.classList.add('hidden'));
+
+        function renderSingleQuestion() {
+            questionsContainer.innerHTML = '';
+            if (currentIndex >= currentQuestions.length) {
+                questionsContainer.innerHTML = `<div class="text-xl font-bold text-green-700">Quiz Complete! Your score: ${score} / ${currentQuestions.length}</div>`;
+                return;
+            }
+            const q = currentQuestions[currentIndex];
+            const questionSection = document.createElement('section');
+            questionSection.className = 'mb-8 border-b border-gray-200 pb-6';
+            questionSection.innerHTML = `
+                <header class="mb-4">
+                    <h3 class="text-lg font-medium text-gray-800" id="question-${currentIndex}">Q${currentIndex + 1}: ${q.question}</h3>
+                </header>
+                <div class="space-y-3 mb-4" role="radiogroup" aria-labelledby="question-${currentIndex}">
+                    ${q.options.map((option, oIndex) => `
+                        <button
+                            type="button"
+                            class="block w-full text-left px-4 py-3 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500
+                            ${userAnswers[currentIndex] === oIndex ? 
+                                (oIndex === q.correctAnswer ? 'correct-answer' : 'incorrect-answer') :
+                                ''}
+                            ${userAnswers[currentIndex] !== undefined && oIndex === q.correctAnswer ? 'correct-answer' : ''}"
+                            aria-pressed="${userAnswers[currentIndex] === oIndex}"
+                            ${userAnswers[currentIndex] !== undefined ? 'disabled' : ''}
+                            data-oidx="${oIndex}"
+                        >
+                            ${String.fromCharCode(65 + oIndex)}. ${option}
+                            ${userAnswers[currentIndex] !== undefined && oIndex === q.correctAnswer ? 
+                                '<i class="fas fa-check-circle ml-2 text-green-500"></i>' : ''}
+                            ${userAnswers[currentIndex] !== undefined && userAnswers[currentIndex] === oIndex && oIndex !== q.correctAnswer ? 
+                                '<i class="fas fa-times-circle ml-2 text-red-500"></i>' : ''}
+                        </button>
+                    `).join('')}
+                </div>
+                ${userAnswers[currentIndex] !== undefined ? `
+                    <div class="explanation mt-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-medium text-blue-800">Explanation:</h4>
+                            <span class="text-sm font-medium ${userAnswers[currentIndex] === q.correctAnswer ? 'text-green-600' : 'text-red-600'}">
+                                ${userAnswers[currentIndex] === q.correctAnswer ? 'Correct!' : 'Incorrect'}
+                            </span>
+                        </div>
+                        <p class="text-blue-700">${q.explanation}</p>
+                    </div>
+                    <button id="nextBtn" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Next</button>
+                ` : ''}
+            `;
+            questionsContainer.appendChild(questionSection);
+
+            // Answer button logic
+            questionsContainer.querySelectorAll('button[data-oidx]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (userAnswers[currentIndex] !== undefined) return;
+                    const oIndex = parseInt(this.getAttribute('data-oidx'));
+                    userAnswers[currentIndex] = oIndex;
+                    if (oIndex === q.correctAnswer) {
+                        score++;
+                        scoreDisplay.textContent = score;
+                    }
+                    renderSingleQuestion();
+                });
+            });
+
+            // Next button logic
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    currentIndex++;
+                    renderSingleQuestion();
+                });
+            }
+        }
+
+        async function generateQuestions() {
+            const subject = subjectSelect.value;
+            const count = parseInt(questionCountSelect.value);
+
+            if (!subject) { alert('Please select a subject/topic first'); return; }
+
+            // Only fallbackBank for unit1
+            const pool = fallbackBank[subject] || [];
+            currentQuestions = [];
+            const shuffled = pool.slice().sort(() => Math.random() - 0.5);
+            for (let i = 0; i < Math.min(count, shuffled.length); i++) {
+                currentQuestions.push(shuffled[i]);
+            }
+            if (currentQuestions.length === 0) {
+                alert("No fallback questions available for this topic.");
+                return;
+            }
+
+            userAnswers = [];
+            score = 0;
+            currentIndex = 0;
+
+            quizTopic.textContent = subjectSelect.options[subjectSelect.selectedIndex].text + ' Quiz';
+            totalQuestions.textContent = currentQuestions.length;
+            scoreDisplay.textContent = '0';
+
+            renderSingleQuestion();
+            quizContainer.classList.remove('hidden');
+        }
+
+        function resetQuiz() {
+            userAnswers = [];
+            score = 0;
+            currentIndex = 0;
+            scoreDisplay.textContent = '0';
+            renderSingleQuestion();
+        }
+    </script>
+</body>
+</html>
